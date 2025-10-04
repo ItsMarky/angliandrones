@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anglian Drones - Professional Aerial Services & Community Hub</title>
+    <style>
+        /* --- Setup, Fonts & Colors --- */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Oswald:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #6a9c4b; /* Green from your logo */
+            --accent-color: #FFA500; /* Orange for community CTAs */
+            --dark-bg: #121212; /* A deeper, premium black */
+            --light-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --border-color: #333333;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden; /* Prevents horizontal scroll from animations */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+        
+        h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ffffff, #b0b0b0); /* Subtle gradient for headings */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        /* --- Animation on Scroll --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background: rgba(18, 18, 18, 0.85);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 45px;
+            transition: transform 0.3s ease;
+        }
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .main-nav {
+            display: none; /* Hidden on mobile by default */
+        }
+        
+        .main-nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 400;
+            position: relative;
+            padding: 5px 0;
+        }
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle { /* Hamburger Icon */
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+        .menu-toggle .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Hamburger active state */
+        .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
+        .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden; /* For Ken Burns effect */
+        }
+        .hero-background {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://placehold.co/1920x1080/1e1e1e/6a9c4b?text=Cinematic+Drone+Shot+of+East+Anglia') no-repeat center center/cover;
+            animation: kenburns 20s ease-out infinite; /* Ken Burns effect */
+            z-index: -2;
+        }
+        @keyframes kenburns {
+            0% { transform: scale(1.1) translateX(-2%); }
+            50% { transform: scale(1) translateX(0); }
+            100% { transform: scale(1.1) translateX(-2%); }
+        }
+        .hero::before { /* Gradient overlay */
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: -1;
+        }
+        .hero-content { max-width: 900px; }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 20px; line-height: 1.2; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .hero p { font-size: 1.2rem; font-weight: 300; margin-bottom: 40px; color: var(--text-muted); }
+        .cta-buttons .btn {
+            padding: 15px 30px;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid transparent;
+        }
+        .btn-primary { background-color: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .btn-secondary { background-color: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        .cta-buttons .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); filter: brightness(1.1); }
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 40px;
+            border: 2px solid #fff;
+            border-radius: 20px;
+        }
+        .scroll-down::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: #fff;
+            border-radius: 2px;
+            animation: scroll-anim 2s infinite;
+        }
+        @keyframes scroll-anim {
+            0% { transform: translate(-50%, 0); opacity: 0; }
+            40% { opacity: 1; }
+            80% { transform: translate(-50%, 12px); opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+
+        /* --- Services Section --- */
+        #services { background-color: var(--light-bg); }
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--dark-bg);
+            border-radius: 10px;
+            padding: 40px 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-color: var(--primary-color);
+        }
+        .service-icon {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .service-icon svg { width: 50px; height: 50px; }
+        .service-card h3 { color: #fff; margin-bottom: 15px; }
+        .service-card p { color: var(--text-muted); }
+
+
+        /* --- Portfolio Snippet --- */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .portfolio-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-item:hover img { transform: scale(1.05); }
+        .portfolio-overlay h4 { margin: 0 0 5px 0; color: #fff; font-family: 'Oswald'; font-size: 1.4rem; transform: translateY(10px); transition: transform 0.5s ease; }
+        .portfolio-overlay p { margin: 0; color: var(--text-muted); transform: translateY(10px); transition: transform 0.5s ease 0.1s; }
+        .portfolio-item:hover h4, .portfolio-item:hover p { transform: translateY(0); }
+
+
+        /* --- Footer --- */
+        .main-footer {
+            background: #0c0c0c;
+            color: var(--text-muted);
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+        .main-footer p { margin-top: 20px; font-size: 0.9rem; }
+
+
+        /* --- Desktop & Tablet Styles (Mobile First) --- */
+        @media (min-width: 768px) {
+            h2 { font-size: 2.8rem; }
+            .hero h1 { font-size: 4rem; }
+            .hero p { font-size: 1.3rem; }
+            
+            .menu-toggle { display: none; }
+            .main-nav {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                background: none;
+                position: static;
+                width: auto;
+                height: auto;
+                padding-top: 0;
+            }
+
+            .services-grid { grid-template-columns: repeat(3, 1fr); }
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
+            .portfolio-grid .portfolio-item:first-child { /* Make first item bigger */
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+        }
+        
+        /* --- Mobile Nav Styles --- */
+        @media (max-width: 767px) {
+            .main-nav {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 100%; /* Start off-screen */
+                width: 100%;
+                height: 100vh;
+                background-color: rgba(18, 18, 18, 0.98);
+                backdrop-filter: blur(10px);
+                transition: left 0.4s ease-in-out;
+            }
+            .main-nav.is-active {
+                left: 0; /* Slide in */
+            }
+            .main-nav a {
+                margin: 20px 0;
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="images/logo.jpeg" alt="Anglian Drones Logo">
+            </a>
+            <nav class="main-nav" id="main-nav">
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#community">Community</a>
+                <a href="#">Contact</a>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Open Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-background"></div>
+            <div class="hero-content reveal">
+                <h1>Anglian Drones: Capturing East Anglia from Above</h1>
+                <p>Professional aerial photography & videography and a thriving community for local drone pilots.</p>
+                <div class="cta-buttons">
+                    <a href="#services" class="btn btn-primary">Our Services</a>
+                    <a href="#community" class="btn btn-secondary">Join Community</a>
+                </div>
+            </div>
+            <a href="#services" class="scroll-down" aria-label="Scroll down"></a>
+        </section>
+
+        <section id="services">
+            <div class="container">
+                <h2 class="reveal">Our Professional Services</h2>
+                <div class="services-grid">
+                    <div class="service-card reveal">
+                        <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                        </div>
+                        <h3>Real Estate</h3>
+                        <p>Elevate property listings with stunning aerial views that capture the full scope and appeal of any location.</p>
+                    </div>
+                    <div class="service-card reveal" style="transition-delay: 0.2s;">
+                         <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <h3>Weddings & Events</h3>
+                        <p>Add a breathtaking cinematic dimension to your special moments, capturing unique perspectives of your event.</p>
+                    </div>
+                    <div class="service-card reveal" style="transition-delay: 0.4s;">
+                        <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                        </div>
+                        <h3>Commercial & Surveys</h3>
+                        <p>Efficient, precise, and safe aerial data collection for construction, agriculture, and infrastructure monitoring.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio">
+             <div class="container">
+                <h2 class="reveal">Featured Work</h2>
+                <div class="portfolio-grid">
+                    <a href="#" class="portfolio-item reveal">
+                        <img src="https://placehold.co/800x600/1e1e1e/6a9c4b?text=Coastal+Estate" alt="Coastal Estate">
+                        <div class="portfolio-overlay">
+                            <h4>Coastal Estate, Southwold</h4>
+                            <p>Real Estate Videography</p>
+                        </div>
+                    </a>
+                    <a href="#" class="portfolio-item reveal" style="transition-delay: 0.2s;">
+                        <img src="https://placehold.co/400x300/1e1e1e/6a9c4b?text=Norfolk+Brogads+Sunrise" alt="Norfolk Broads Sunrise">
+                        <div class="portfolio-overlay">
+                            <h4>Norfolk Broads Sunrise</h4>
+                            <p>Landscape Photography</p>
+                        </div>
+                    </a>
+                     <a href="#" class="portfolio-item reveal" style="transition-delay: 0.4s;">
+                        <img src="https://placehold.co/400x300/1e1e1e/6a9c4b?text=Wedding+at+the+Barn" alt="Wedding at the Barn">
+                        <div class="portfolio-overlay">
+                            <h4>Wedding at the Barn</h4>
+                            <p>Event Videography</p>
+                        </div>
+                    </a>
+                </div>
+             </div>
+        </section>
+
+        </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Anglian Drones. All Rights Reserved. CAA Approved. Gorleston-on-Sea, UK.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const menuToggle = document.getElementById('menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('is-active');
+            mainNav.classList.toggle('is-active');
+        });
+
+        // --- Animation on Scroll ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        const elementsToReveal = document.querySelectorAll('.reveal');
+        elementsToReveal.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
