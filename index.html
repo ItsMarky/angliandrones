@@ -75,15 +75,17 @@
         }
 
         /* --- "Coming Soon" Hero Section --- */
+        /* MODIFIED FOR MOBILE FIX */
         .hero {
-            height: 100vh;
+            min-height: 100vh; /* Changed from height to min-height */
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: #fff;
             position: relative;
-            overflow: hidden; 
+            overflow: hidden;
+            padding: 100px 0; /* Add padding for spacing */
         }
         .hero-background {
             position: absolute;
@@ -106,7 +108,6 @@
         }
         .hero-content { 
             max-width: 900px; 
-            padding-bottom: 5vh; /* Nudge content up slightly */
         }
         .hero h1 { 
             font-size: 2.8rem; 
@@ -162,14 +163,13 @@
         }
        
         /* --- Footer --- */
+        /* MODIFIED FOR MOBILE FIX */
         .main-footer {
             background: #0c0c0c;
             color: var(--text-muted);
             padding: 25px 0;
             text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            /* position: fixed; <-- REMOVED */
         }
         .main-footer p { 
             margin: 0; 
