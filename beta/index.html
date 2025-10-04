@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anglian Drones - Services & Community</title>
+    <meta name="description" content="Choose between professional aerial services or join our thriving drone pilot community and resource hub in East Anglia.">
+    <style>
+        /* --- Setup, Fonts & Colors (From Original) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Oswald:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #6a9c4b; /* Green for services */
+            --accent-color: #FFA500;  /* Orange for community */
+            --dark-bg: #121212;
+            --light-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-muted: #9e9e9e;
+            --border-color: #333333;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling on split-screen view */
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+
+        /* --- Split Screen Container --- */
+        .split-screen-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .panel {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: width 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 1;
+            transition: background-color 0.5s ease;
+        }
+
+        .panel.left {
+            background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&q=80&w=1920') no-repeat center center/cover;
+        }
+        .panel.right {
+            /* NEW COMMUNITY HUB BACKGROUND IMAGE */
+            background: url('images/header.jpg') no-repeat center center/cover;
+        }
+
+        .panel-content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            padding: 20px;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .panel h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 20px 0;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid;
+            display: inline-block;
+            cursor: pointer;
+            background-color: transparent;
+            color: #fff;
+        }
+        .panel.left .btn { border-color: var(--primary-color); }
+        .panel.right .btn { border-color: var(--accent-color); }
+
+        .panel:hover .btn {
+            color: #000;
+        }
+        .panel.left:hover .btn { background-color: var(--primary-color); }
+        .panel.right:hover .btn { background-color: var(--accent-color); }
+
+        .panel:hover::before { background-color: rgba(0,0,0,0.4); }
+        .panel:hover .panel-content { transform: scale(1.05); }
+
+        /* --- Expanded/Hidden States --- */
+        .panel.expanded { width: 100%; }
+        .panel.hidden { width: 0%; }
+        .panel.expanded .panel-content {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+
+        /* --- Full Page Content Sections --- */
+        .content-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; 
+            background-color: var(--dark-bg);
+            display: none; 
+            z-index: 20;
+            animation: fadeIn 1s ease 0.5s forwards;
+            opacity: 0;
+            overflow-y: auto; 
+            scroll-behavior: smooth;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1001; /* Make sure it's on top of hub-nav */
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none; 
+        }
+        
+        .back-button:hover { color: var(--primary-color); }
+
+        /* --- Reusable Content Styles --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        .content-section-inner { padding: 80px 0; }
+        .content-section-inner:nth-child(even) { background-color: var(--light-bg); }
+        
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 10px; color: #fff; }
+        .section-title p { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+        
+        /* --- Services Content Styles --- */
+        #services-content .content-section-inner:first-child { padding-top: 100px; } 
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background-color: var(--light-bg);
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            border-radius: 8px;
+        }
+        .service-card h3 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; margin-bottom: 15px; color: #fff; }
+
+        /* --- Community Hub Content Styles --- */
+        /* -- NEW STICKY NAV BAR FOR HUB -- */
+        .hub-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(30, 30, 30, 0.9); /* --light-bg with opacity */
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .hub-nav a {
+            font-family: 'Oswald', sans-serif;
+            color: var(--text-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        .hub-nav a:hover, .hub-nav a.active {
+            color: var(--accent-color);
+        }
+        /* -- END NEW STYLES -- */
+
+        .hub-hero { padding: 60px 20px; text-align: center; }
+        .hub-hero h1 { font-size: 3rem; text-transform: uppercase; color: var(--accent-color); }
+        .hub-hero p { font-size: 1.2rem; max-width: 700px; margin: 10px auto 0; color: var(--text-muted); }
+        
+        .map-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border: 2px solid var(--border-color); border-radius: 8px; }
+        .map-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .resources-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        .resource-card h3 { font-size: 1.8rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .resource-card ul { list-style: none; padding: 0; }
+        .resource-card li { margin-bottom: 15px; }
+        .resource-card a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
+        .resource-card a:hover { text-decoration: underline; }
+        .checklist li { padding-left: 30px; position: relative; }
+        .checklist li::before { content: '✓'; color: var(--primary-color); position: absolute; left: 0; font-size: 1.5rem; line-height: 1; }
+        
+        .showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        
+        .photo-of-the-week, .facebook-embed { text-align: center; }
+        .photo-of-the-week h3, .facebook-embed h3 { margin-bottom: 20px; }
+
+        .instagram-follow-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+        }
+        .instagram-follow-btn:hover { transform: scale(1.05); }
+
+        .facebook-join-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            color: #fff;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .facebook-join-btn:hover {
+            transform: scale(1.05);
+            background-color: transparent;
+            color: var(--accent-color);
+        }
+
+        .footer { background: #0c0c0c; color: var(--text-muted); padding: 40px 0; text-align: center; }
+        .footer p { margin: 0; font-size: 0.9rem; }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 768px) {
+            .split-screen-container { flex-direction: column; }
+            .panel { width: 100%; height: 50%; }
+            .panel h2 { font-size: 2.2rem; }
+            .panel.expanded { width: 100%; height: 100%; }
+            .panel.hidden { height: 0%; }
+            .services-grid { grid-template-columns: 1fr; }
+            .resources-grid, .showcase-grid { grid-template-columns: 1fr; gap: 50px; }
+            .hub-nav { gap: 20px; }
+            .hub-nav a { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="split-screen-container" id="splitScreen">
+        <div class="panel left" id="panelLeft">
+            <div class="panel-content">
+                <h2>Professional Services</h2>
+                <a class="btn">Explore Our Work</a>
+            </div>
+        </div>
+        <div class="panel right" id="panelRight">
+            <div class="panel-content">
+                <h2>Community Hub</h2>
+                <a class="btn">Explore The Hub</a>
+            </div>
+        </div>
+    </div>
+    
+    <a class="back-button" id="backButton">← Home</a>
+
+    <div class="content-section" id="services-content">
+        <section class="content-section-inner">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Professional Aerial Services</h2>
+                    <p>From breathtaking property marketing to detailed inspections, we provide high-quality aerial solutions tailored to your needs.</p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Real Estate & Property</h3>
+                        <p>Sell properties faster with stunning aerial photos and cinematic video tours that highlight the property and its surroundings.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Inspections & Surveys</h3>
+                        <p>Safely and efficiently inspect roofs, structures, and land with high-resolution imagery, saving time and reducing risk.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Events & Weddings</h3>
+                        <p>Capture the scale and energy of your event or the magic of your special day from a unique and unforgettable perspective.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="footer">
+            <p>For inquiries: <a href="mailto:info@angliandrones.co.uk" style="color: var(--primary-color); text-decoration: none;">info@angliandrones.co.uk</a></p>
+            <p style="margin-top: 10px;">© 2025 Anglian Drones. All Rights Reserved. Norwich, UK.</p>
+        </footer>
+    </div>
+    
+    <div class="content-section" id="community-content">
+        <nav class="hub-nav">
+            <a href="#hub-map">Map</a>
+            <a href="#hub-resources">Resources</a>
+            <a href="#hub-showcase">Showcase</a>
+        </nav>
+        <header class="hub-hero content-section-inner">
+            <h1>The Anglian Drones Hub</h1>
+            <p>Your go-to resource for drone flying in East Anglia. Discover new spots, get essential checklists, and join our thriving community of local pilots.</p>
+        </header>
+
+        <section class="content-section-inner" id="hub-map">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Discover Local Flying Spots</h2>
+                </div>
+                <div class="map-container">
+                    <iframe src="http://googleusercontent.com/maps.google.com/7" width="640" height="480"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section-inner" id="hub-resources">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Essential Pilot Resources</h2>
+                </div>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>Pre-Flight Checklist</h3>
+                        <ul class="checklist">
+                            <li>Check weather & wind conditions.</li>
+                            <li>Inspect drone for any damage (props, arms, camera).</li>
+                            <li>Ensure batteries (drone & controller) are fully charged.</li>
+                            <li>Check airspace for restrictions (using DroneScene/apps).</li>
+                            <li>Format SD card & check camera settings.</li>
+                            <li>Confirm GPS lock & set Return-to-Home point.</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3>Useful Links</h3>
+                        <ul>
+                            <li><a href="https://register-drones.caa.co.uk/drone-code" target="_blank" rel="noopener noreferrer">The Official CAA Drone Code</a></li>
+                            <li><a href="https://dronesafetymap.com/" target="_blank" rel="noopener noreferrer">Drone Safety Map (Altitude Angel)</a></li>
+                            <li><a href="https://www.uavforecast.com/" target="_blank" rel="noopener noreferrer">UAV Forecast</a></li>
+                            <li><a href="https://dronescene.co.uk/" target="_blank" rel="noopener noreferrer">DroneScene UK Flying Spots</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="content-section-inner" id="hub-showcase">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Community Showcase</h2>
+                </div>
+                <div class="showcase-grid">
+                    <div class="photo-of-the-week">
+                        <h3>From Our Instagram</h3>
+                        <a href="https://www.instagram.com/anglian_drones/" target="_blank" rel="noopener noreferrer" class="instagram-follow-btn">Follow on Instagram</a>
+                    </div>
+                    
+                    <div class="facebook-embed">
+                        <h3>Join the Conversation</h3>
+                        <a href="https://www.facebook.com/groups/angliandrones" class="facebook-join-btn" target="_blank" rel="noopener noreferrer">Go to Facebook Group</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>For inquiries: <a href="mailto:info@angliandrones.co.uk" style="color: var(--primary-color); text-decoration: none;">info@angliandrones.co.uk</a></p>
+            <p style="margin-top: 10px;">© 2025 Anglian Drones. All Rights Reserved. Norwich, UK.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const panelLeft = document.getElementById('panelLeft');
+            const panelRight = document.getElementById('panelRight');
+            const servicesContent = document.getElementById('services-content');
+            const communityContent = document.getElementById('community-content');
+            const backButton = document.getElementById('backButton');
+            const body = document.body;
+
+            panelLeft.addEventListener('click', () => {
+                panelLeft.classList.add('expanded');
+                panelRight.classList.add('hidden');
+                
+                setTimeout(() => {
+                    servicesContent.style.display = 'block';
+                    backButton.style.display = 'block';
+                }, 400); 
+            });
+
+            panelRight.addEventListener('click', () => {
+                panelRight.classList.add('expanded');
+                panelLeft.classList.add('hidden');
+
+                setTimeout(() => {
+                    communityContent.style.display = 'block';
+                    backButton.style.display = 'block';
+                }, 400);
+            });
+            
+            backButton.addEventListener('click', () => {
+                panelLeft.classList.remove('expanded', 'hidden');
+                panelRight.classList.remove('expanded', 'hidden');
+                
+                servicesContent.style.display = 'none';
+                communityContent.style.display = 'none';
+
+                backButton.style.display = 'none';
+                body.style.overflow = 'hidden';
+            });
+
+            // --- NEW JAVASCRIPT FOR HUB NAV ---
+            const hubNavLinks = document.querySelectorAll('.hub-nav a');
+            const hubSections = document.querySelectorAll('#community-content .content-section-inner');
+
+            const observerOptions = {
+                root: communityContent, // Observe inside the scrolling container
+                rootMargin: '-50% 0px -50% 0px', // Trigger when section is in the middle of the viewport
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        // Ensure it's not the hero section which doesn't have an ID for nav
+                        if (id) {
+                            const activeLink = document.querySelector(`.hub-nav a[href="#${id}"]`);
+                            
+                            hubNavLinks.forEach(link => link.classList.remove('active'));
+                            if (activeLink) {
+                                activeLink.classList.add('active');
+                            }
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            hubSections.forEach(section => {
+                if (section.id) { // Only observe sections that have an ID for nav
+                    observer.observe(section);
+                }
+            });
+
+            // Smooth scrolling for hub-nav links
+            hubNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Offset for the sticky nav bar itself
+                        const offsetTop = targetElement.offsetTop - document.querySelector('.hub-nav').offsetHeight; 
+                        communityContent.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            // --- END NEW JAVASCRIPT ---
+        });
+    </script>
+</body>
+</html>
